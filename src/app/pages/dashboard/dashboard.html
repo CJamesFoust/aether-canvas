@@ -1,5 +1,9 @@
 <p>dashboard works!</p>
 
 <div class="widgetHostContainer">
-    <ng-container WidgetHost ></ng-container>
+  @for (widget of store.widgets(); track widget.id) {
+    <div class="grid-cell">
+      <ng-container WidgetHost [widgetConfig]="widget"></ng-container>
+    </div>
+  }
 </div>

@@ -1,9 +1,9 @@
 import { WidgetInstance } from "../../shared/models/widget-instance";
-import { SignalStore } from '@r'
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'
 
 interface DashboardState {
     widgets: WidgetInstance[];
-    isEditMode: false;
+    isEditMode: boolean;
 }
 
 const initialState: DashboardState = {
@@ -24,4 +24,12 @@ const initialState: DashboardState = {
     ]
 };
 
-export const DashboardStore = signalStore()
+export const DashboardStore = signalStore(
+    { providedIn: 'root' },
+    withState(initialState),
+    withMethods((store) => ({
+        toggleEditMode() {
+            patchState(store, (state) => ({ isEditMode: !state.isEditMode }));
+        }
+    }))
+)

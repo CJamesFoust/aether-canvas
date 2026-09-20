@@ -1,24 +1,18 @@
-import { Component, OnInit, viewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { WidgetHost } from '../../shared/ui/widget-host';
-import { TestWidget } from '../../components/test-widget/test-widget';
+import { DashboardStore } from './dashboard.store';
 
 @Component({
   selector: 'app-dashboard',
   imports: [WidgetHost],
   templateUrl: './dashboard.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
-  host = viewChild(WidgetHost)
-
-
-  ngOnInit(): void {
-    const vcr: ViewContainerRef | undefined = this.host()?.viewContainerRef;
-
-    if (vcr) {
-      vcr.clear();
-      const child = vcr.createComponent(TestWidget)
-      child.setInput('title', 'Dynamic Widget')
-    }
-  }
+export class Dashboard {
+  readonly store = inject(DashboardStore);
 }
