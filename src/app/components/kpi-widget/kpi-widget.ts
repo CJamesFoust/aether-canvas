@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './kpi-widget.css',
   templateUrl: './kpi-widget.html',
 })
-export class KpiWidget {}
+export class KpiWidget {
+  readonly settings = input<any>({});
+}

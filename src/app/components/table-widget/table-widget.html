@@ -1,0 +1,37 @@
+<div class="flex flex-col h-full">
+    <div class="flex justify-between items-center mb-2">
+        <h3 class="font-semibold text-gray-700 dark:text-gray-200">
+            {{ settings().title || 'Data Table'}}
+        </h3>
+        <span class="text-xs text-gray-400">Live Feed</span>
+    </div>
+
+    <div class="overflow-x-auto flex-grow">
+        <table class="w-full text-left text-xs">
+            <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-200">
+                    <th class="pb-2 font-medium dark:text-gray-200">Metric</th>
+                    <th class="pb-2 font-medium dark:text-gray-200">Status</th>
+                    <th class="pb-2 font-medium dark:text-gray-200 text-right">Value</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800 dark:text-gray-200">
+                <tr>
+                    <td class="py-2">API Gateway</td>
+                    <td class="py-2"><span class="text-green-500 font-medium">Healthy</span></td>
+                    <td class="py-2 text-right">12ms</td>
+                </tr>
+                <tr>
+                    <td class="py-2">Auth Service</td>
+                    <td class="py-2"><span class="text-green-500 font-medium">Healthy</span></td>
+                    <td class="py-2 text-right">24ms</td>
+                </tr>
+                <tr>
+                    <td class="py-2">Database Cluster</td>
+                    <td class="py-2"><span class="text-amber-500 font-medium">Warning</span></td>
+                    <td class="py-2 text-right">142ms</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

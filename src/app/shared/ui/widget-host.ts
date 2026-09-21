@@ -1,31 +1,44 @@
-import { Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
 import { WidgetInstance } from '../models/widget-instance';
 import { KpiWidget } from '../../components/kpi-widget/kpi-widget';
 import { ChartWidget } from '../../components/chart-widget/chart-widget';
+import { TableWidget } from '../../components/table-widget/table-widget';
 
 @Directive({
   selector: '[WidgetHost]',
   standalone: true,
 })
 export class WidgetHost {
-  public viewContainerRef = inject(ViewContainerRef);
-
-  widgetConfig = input.required<WidgetInstance>();
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private componentRef?: ComponentRef<any>;
+  readonly widgetConfig = input.required<any>();
 
   constructor() {
+
     effect(() => {
       const config = this.widgetConfig();
       const vcr = this.viewContainerRef;
 
       vcr.clear();
 
-      if (config.type === 'KPI_METRIC') {
-        const compRef = vcr.createComponent(KpiWidget);
-        compRef.setInput('config', config.settings);
-      } else if (config.type === 'CHART_TIME_SERIES') {
-        const compRef = vcr.createComponent(ChartWidget);
-        compRef.setInput('config', config.settings);
+      let componentType: any;
+
+      switch (config.type) {
+        case 'KPI_METRIC':
+          componentType = KpiWidget;
+          break;
+        case 'CHART_TIME_SERIES':
+          componentType = ChartWidget;
+          break;
+        case 'TABLE_DATA':
+          componentType = TableWidget;
+          break;
+        default:
+          return;
       }
+
+      this.componentRef = this.viewContainerRef.createComponent(componentType);
+      this.componentRef.setInput('settings', config.settings);
     });
   }
 }

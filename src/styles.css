@@ -2,6 +2,14 @@
 
 @import 'tailwindcss';
 
+:root {
+  --mat-sidenav-container-divider-color: var(--color-gray-200);
+
+  @media (prefers-color-scheme: dark) {
+    --mat-sidenav-container-divider-color: var(--color-gray-600);
+  }
+}
+
 .lego-grid-board {
   background-size: calc((100% - (11 * 1rem)) / 12 + 1rem) 96px; /* 80px row height + 16px row gap */
   background-position: 0 0;

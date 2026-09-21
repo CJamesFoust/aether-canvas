@@ -1,18 +1,24 @@
-import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, signal } from '@angular/core';
 import { WidgetHost } from '../../shared/ui/widget-host';
 import { DashboardStore } from './dashboard.store';
 import { WidgetInstance } from '../../shared/models/widget-instance';
-import { CdkDropList, moveItemInArray, CdkDrag, CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { moveItemInArray, CdkDrag, CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [WidgetHost, CdkDropList, CdkDrag],
+  imports: [WidgetHost, FormsModule, CdkDrag, MatSidenavModule, MatIconModule, MatButtonModule,CommonModule,],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
   readonly store = inject(DashboardStore);
+  readonly activeConfigWidget = signal<any | null>(null);
 
   gridContainer = viewChild<ElementRef>('gridContainer');
 
@@ -93,6 +99,34 @@ export class Dashboard {
     return false
   }
 
+  private calculateNextPosition(newCols: number, newRows: number) {
+    const currentWidgets = this.store.widgets();
+    const totalColumns = 12;
+
+    if (currentWidgets.length === 0) {
+      return { x: 0, y: 0, cols: newCols, rows: newRows };
+    }
+
+    const lastWidget = currentWidgets[currentWidgets.length - 1];
+    const tentativeX = lastWidget.position.x + lastWidget.position.cols;
+
+    if (tentativeX + newCols <= totalColumns) {
+      return {
+        x: tentativeX,
+        y: lastWidget.position.y,
+        cols: newCols,
+        rows: newRows
+      };
+    } else {
+      return {
+        x: 0,
+        y: Math.max(...currentWidgets.map(w => w.position.y + w.position.rows)),
+        cols: newCols,
+        rows: newRows
+      };
+    }
+  }
+
   onDrop(event: CdkDragDrop<any[]>) {
     const widgets = [...this.store.widgets()];
 
@@ -100,39 +134,45 @@ export class Dashboard {
   }
 
   addNewKpi() {
-    const currentWidgets = this.store.widgets();
-    const totalColumns = 12;
-    const newCols = 3;
-    const newRows = 2;
-
-    let nextX = 0;
-    let nextY = 0;
-
-    if (currentWidgets.length > 0) {
-      const lastWidget = currentWidgets[currentWidgets.length - 1];
-      const tentativeX = lastWidget.position.x + lastWidget.position.cols;
-
-      if ( tentativeX + newCols <= totalColumns) {
-        nextX = tentativeX;
-        nextY = lastWidget.position.y;
-      } else {
-        nextX = 0;
-        nextY = Math.max(...currentWidgets.map((w) => w.position.y + w.position.rows));
-      }
-
-    }
-
-    const newWidget: WidgetInstance = {
-      id: `widget-kpi-${crypto.randomUUID()}`,
+    this.store.addWidget({
+      id: crypto.randomUUID(),
       type: 'KPI_METRIC',
-      position: { x: nextX, y: nextY, cols: newCols, rows: newRows },
-      settings: { title: 'Server CPU Usage', refreshRate: 3000 },
-    };
+      position: this.calculateNextPosition(3, 2),
+      settings: { title: 'New KPI', refreshRate: 3000 }
+    });
+   }
+  
 
-    this.store.addWidget(newWidget);
+  addNewTable() {
+    this.store.addWidget({
+      id: crypto.randomUUID(),
+      type: 'TABLE_DATA',
+      position: this.calculateNextPosition(6, 3),
+      settings: { title: 'System Health Status' }
+    });
   }
 
   deleteWidget(id: string) {
     this.store.removeWidget(id);
+  }
+
+  openSettings(widget: any) {
+    this.activeConfigWidget.set(widget);
+  }
+
+  closeSettings() {
+    this.activeConfigWidget.set(null);
+  }
+
+  saveSettings(formValues: { title: string; refreshRate?: number }) {
+    const widget = this.activeConfigWidget();
+    if (!widget) return;
+
+    this.store.updateWidgetSettings(widget.id, {
+      title: formValues.title,
+      refreshRate: formValues.refreshRate ? Number(formValues.refreshRate) : widget.settings.refreshRate
+    });
+
+    this.closeSettings();
   }
 }

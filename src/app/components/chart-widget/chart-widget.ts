@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './chart-widget.css',
   templateUrl: './chart-widget.html',
 })
-export class ChartWidget {}
+export class ChartWidget {
+  readonly settings = input<any>({});
+}
