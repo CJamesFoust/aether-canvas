@@ -1,3 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+.lego-grid-board {
+  background-size: calc((100% - (11 * 1rem)) / 12 + 1rem) 96px; /* 80px row height + 16px row gap */
+  background-position: 0 0;
+  background-image: 
+    linear-gradient(to right, rgba(156, 163, 175, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(156, 163, 175, 0.25) 1px, transparent 1px);
+}

@@ -20,10 +20,21 @@
     </div>
 </div>
 
-<div class="grid grid-cols-12 gap-4 p-6">
+<div 
+    #gridContainer
+    class="grid grid-cols-12 gap-4 relative rounded-xl transition-all auto-rows-[80px]"
+    [class.lego-grid-board]="store.isEditMode()"
+    [class.border]="store.isEditMode()"
+    [class.border-dashed]="store.isEditMode()"
+    [class.border-gray-300]="store.isEditMode()"
+>
   @for (widget of store.widgets(); track widget.id) {
     <div 
-        class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col justify-between relative border transition"
+        cdkDrag
+        [cdkDragDisabled]="!store.isEditMode()"
+        (cdkDragEnded)="onDragEnded($event, widget)"
+        class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col justify-between relative border transition z-10"
+        [class.cursor-move]="store.isEditMode()"
         [class.border-amber-500]="store.isEditMode()"
         [style.grid-column-start]="widget.position.x + 1"
         [style.grid-column-end]="'span ' + widget.position.cols"
@@ -31,7 +42,8 @@
         [style.grid-row-end]="'span ' + widget.position.rows"
     >
         @if ( store.isEditMode() ) {
-            <div class="flex justify-end mb-2">
+            <div class="flex justify-between items-center mb-2 handle text-xs text-gray-400 font-medium">
+                <span>:: Drag to move</span>
                 <button 
                     (click)="store.removeWidget(widget.id)" 
                     class="text-gray-400 hover:text-red-500 text-sm font-semibold cursor-pointer" 

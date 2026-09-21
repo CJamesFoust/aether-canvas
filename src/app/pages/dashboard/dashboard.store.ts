@@ -42,6 +42,14 @@ export const DashboardStore = signalStore(
             patchState(store, (state) => ({
                 widgets: state.widgets.filter((w) => w.id !== id)
             }))
+        },
+
+        updateWidgetPosition(id: string, newPosition: { x: number; y: number; cols: number; rows: number}) {
+            patchState(store, (state) => ({
+                widgets: state.widgets.map((w) =>
+                    w.id === id ? { ...w, position: { ...w.position, ...newPosition } } : w
+                )
+            }));
         }
     }))
 )
