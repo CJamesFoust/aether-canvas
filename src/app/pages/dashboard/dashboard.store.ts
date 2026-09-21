@@ -30,6 +30,18 @@ export const DashboardStore = signalStore(
     withMethods((store) => ({
         toggleEditMode() {
             patchState(store, (state) => ({ isEditMode: !state.isEditMode }));
+        },
+
+        addWidget(widget: WidgetInstance) {
+            patchState(store, (state) => ({
+                widgets: [...state.widgets, widget]
+            }));
+        },
+
+        removeWidget(id: string) {
+            patchState(store, (state) => ({
+                widgets: state.widgets.filter((w) => w.id !== id)
+            }))
         }
     }))
 )
