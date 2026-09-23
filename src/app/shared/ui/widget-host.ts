@@ -1,5 +1,4 @@
 import { ComponentRef, Directive, effect, inject, input, ViewContainerRef } from '@angular/core';
-import { WidgetInstance } from '../models/widget-instance';
 import { KpiWidget } from '../../components/kpi-widget/kpi-widget';
 import { ChartWidget } from '../../components/chart-widget/chart-widget';
 import { TableWidget } from '../../components/table-widget/table-widget';

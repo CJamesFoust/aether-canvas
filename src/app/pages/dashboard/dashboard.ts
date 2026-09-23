@@ -8,10 +8,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { WidgetSettings } from '../../components/widget-settings/widget-settings';
+import { patchState } from '@ngrx/signals';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [WidgetHost, FormsModule, CdkDrag, MatSidenavModule, MatIconModule, MatButtonModule,CommonModule,],
+  imports: [WidgetHost, FormsModule, CdkDrag, MatSidenavModule, MatIconModule, MatButtonModule, CommonModule, WidgetSettings],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.css',
@@ -19,8 +21,13 @@ import { MatButtonModule } from '@angular/material/button';
 export class Dashboard {
   readonly store = inject(DashboardStore);
   readonly activeConfigWidget = signal<any | null>(null);
+  readonly opened = signal(false);
 
   gridContainer = viewChild<ElementRef>('gridContainer');
+
+  trackEvent(isOpen: string) {
+    console.log(isOpen);
+  }
 
   onDragEnded(event: CdkDragEnd, widget: any) {
     const element = event.source.element.nativeElement;
@@ -158,10 +165,14 @@ export class Dashboard {
 
   openSettings(widget: any) {
     this.activeConfigWidget.set(widget);
+    this.store.updateActiveWidgetEditing(widget);
+    this.opened.set(true);
   }
 
   closeSettings() {
     this.activeConfigWidget.set(null);
+    this.store.updateActiveWidgetEditing();
+    this.opened.set(false);
   }
 
   saveSettings(formValues: { title: string; refreshRate?: number }) {

@@ -1,0 +1,4 @@
+.mat-sidenav .mat-drawer-inner-container {
+    display: flex;
+    align-items: center;
+}

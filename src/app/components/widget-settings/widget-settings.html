@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-8">
+    @if (store.activeWidgetEditing()) {
+      @switch (store.activeWidgetEditing()?.type) {
+        @case ('KPI_METRIC') {
+          <app-kpi-settings-form></app-kpi-settings-form>
+        }
+    
+        @case ('CHART_TIME_SERIES') {
+          <app-chart-settings-form></app-chart-settings-form>
+        }
+    
+        @case ('TABLE_DATA') {
+          <app-table-settings-form></app-table-settings-form>
+        }
+      }
+    }
+    
+    <button mat-flat-button color="primary" (click)="closeSettings.emit()">Close</button>
+</div>

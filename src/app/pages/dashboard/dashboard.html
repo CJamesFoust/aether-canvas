@@ -10,23 +10,23 @@
 
       <!-- Navigation Links -->
       <nav class="space-y-1 mb-6">
-        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium">
+        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:!text-gray-200 font-medium">
           <mat-icon>dashboard</mat-icon> Dashboard
         </a>
-        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg text-gray-600 dark:!text-gray-200  hover:bg-gray-100 dark:hover:bg-gray-700">
           <mat-icon>settings</mat-icon> Settings
         </a>
       </nav>
 
       <hr class="border-gray-200 dark:border-gray-700 my-4" />
 
-      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Widget Catalog</p>
+      <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">Widget Catalog</p>
       
       <!-- Widget Addition Triggers -->
       <div class="space-y-2">
         <button 
           mat-stroked-button 
-          class="w-full !justify-start !text-left" 
+          class="w-full !justify-start !text-left dark:!text-gray-200 " 
           (click)="addNewKpi()"
         >
           <mat-icon>assessment</mat-icon> Add KPI Metric
@@ -34,7 +34,7 @@
 
         <button 
           mat-stroked-button 
-          class="w-full !justify-start !text-left" 
+          class="w-full !justify-start dark:!text-gray-200 !text-left" 
           (click)="addNewTable()"
         >
           <mat-icon>table_chart</mat-icon> Add Data Table
@@ -52,7 +52,7 @@
     
     <!-- Top Toolbar -->
     <header class="flex justify-between items-center px-6 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800 shadow-sm">
-      <h1 class="text-lg font-bold text-gray-800 dark:text-gray-100">Workspace Overview</h1>
+      <h1 class="text-lg font-bold text-gray-800 dark:text-gray-100">Workspace Overview {{ store.activeWidgetEditing()?.type }}</h1>
       
       <div class="flex gap-3">
         <button 
@@ -66,45 +66,60 @@
     </header>
 
     <!-- Lego Grid Board Content -->
-    <div class="p-6 flex-grow">
-      <div 
-        #gridContainer
-        class="grid grid-cols-12 gap-4 p-6 relative rounded-xl transition-all auto-rows-[80px]"
-        [class.lego-grid-board]="store.isEditMode()"
-        [class.border]="store.isEditMode()"
-        [class.border-dashed]="store.isEditMode()"
-        [class.border-gray-300]="store.isEditMode()"
-      >
-        @for (widget of store.widgets(); track widget.id) {
-          <div 
-            cdkDrag
-            [cdkDragDisabled]="!store.isEditMode()"
-            (cdkDragEnded)="onDragEnded($event, widget)"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col justify-between relative border border-transparent transition z-10"
-            [class.cursor-move]="store.isEditMode()"
-            [class.border-amber-500]="store.isEditMode()"
-            [style.grid-column-start]="widget.position.x + 1"
-            [style.grid-column-end]="'span ' + widget.position.cols"
-            [style.grid-row-start]="widget.position.y + 1"
-            [style.grid-row-end]="'span ' + widget.position.rows"
-          >
-            @if (store.isEditMode()) {
-              <div class="flex justify-between items-center mb-2 text-xs text-gray-400 font-medium z-20">
-                <span>:: Lego Brick</span>
-                <div class="flex gap-1">
-                  <button mat-button class="!text-xs !min-w-0 !px-2" (click)="openSettings(widget)">Configure</button>
-                  <button mat-button color="warn" class="!text-xs !min-w-0 !px-2" (click)="store.removeWidget(widget.id)">Remove</button>
-                </div>
+    <mat-sidenav-container class="h-full !bg-gray-500">
+        <mat-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="trackEvent('open!')" position="end" class="w-full pt-5 !rounded-none !bg-white dark:!bg-gray-700">
+            <app-widget-settings class="dark:text-white" (closeSettings)="closeSettings()"></app-widget-settings>
+        </mat-sidenav>
+        <mat-sidenav-content class="h-full">
+            <div class="p-6 flex-grow">
+              <div
+                #gridContainer
+                class="grid grid-cols-12 gap-4 p-6 relative rounded-xl transition-all auto-rows-[80px]"
+                [class.lego-grid-board]="store.isEditMode()"
+                [class.border]="store.isEditMode()"
+                [class.border-dashed]="store.isEditMode()"
+                [class.border-gray-300]="store.isEditMode()"
+              >
+                @for (widget of store.widgets(); track widget.id) {
+                  <div
+                    cdkDrag
+                    [cdkDragDisabled]="!store.isEditMode()"
+                    (cdkDragEnded)="onDragEnded($event, widget)"
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 pt-2 flex flex-col justify-between relative border border-transparent transition z-10"
+                    [class.cursor-move]="store.isEditMode()"
+                    [class.border-amber-500]="store.isEditMode()"
+                    [style.grid-column-start]="widget.position.x + 1"
+                    [style.grid-column-end]="'span ' + widget.position.cols"
+                    [style.grid-row-start]="widget.position.y + 1"
+                    [style.grid-row-end]="'span ' + widget.position.rows"
+                  >
+                      <div class="flex justify-between items-center mb-2 text-xs text-gray-400 font-medium z-20"
+                        [class]="store.isEditMode() ? '!justify-between' : ''"
+                      >
+                        <span class="text-xl">{{ widget.settings['title'] }}</span>
+                        @if (store.isEditMode()) {
+                            <span>:: Drag to Move</span>
+                        }
+                            <div class="flex gap-1">
+                                <button mat-button class="!text-xs !min-w-0 !px-2 dark:!text-white" (click)="openSettings(widget)">
+                                    <mat-icon class="!mr-0">more_horiz</mat-icon>
+                                </button>
+                                @if (store.isEditMode()) {
+                                    <button mat-button color="warn" class="!text-xs !min-w-0 !px-2 dark:!text-white" (click)="store.removeWidget(widget.id)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                }
+                            </div>
+                      </div>
+                    <div class="flex-grow">
+                      <ng-container WidgetHost [widgetConfig]="widget"></ng-container>
+                    </div>
+                  </div>
+                }
               </div>
-            }
-
-            <div class="flex-grow">
-              <ng-container WidgetHost [widgetConfig]="widget"></ng-container>
             </div>
-          </div>
-        }
-      </div>
-    </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
 
   </mat-drawer-content>
 </mat-drawer-container>

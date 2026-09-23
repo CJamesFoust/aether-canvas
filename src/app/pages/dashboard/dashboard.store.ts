@@ -4,10 +4,12 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'
 interface DashboardState {
     widgets: WidgetInstance[];
     isEditMode: boolean;
+    activeWidgetEditing: WidgetInstance | null;
 }
 
 const initialState: DashboardState = {
     isEditMode: false,
+    activeWidgetEditing: null,
     widgets: [
         {
             id: 'widget-kpi-1',
@@ -59,5 +61,11 @@ export const DashboardStore = signalStore(
                 )
             }))
         },
+
+        updateActiveWidgetEditing(widget?: WidgetInstance) {
+            patchState(store, {
+                activeWidgetEditing: widget || null
+            });
+        }
     }))
 )
