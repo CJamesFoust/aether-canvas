@@ -179,10 +179,10 @@ export class Dashboard {
     const widget = this.activeConfigWidget();
     if (!widget) return;
 
-    this.store.updateWidgetSettings(widget.id, {
+    this.store.updateWidgetSettings({
       title: formValues.title,
       refreshRate: formValues.refreshRate ? Number(formValues.refreshRate) : widget.settings.refreshRate
-    });
+    }, widget.id);
 
     this.closeSettings();
   }

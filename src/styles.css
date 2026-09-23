@@ -22,3 +22,10 @@
     display: flex;
     justify-content: center;
 }
+
+.large-icon {
+  --icon-size: 24px;
+  font-size: var( --icon-size) !important;
+  height: var( --icon-size) !important;
+  width: var( --icon-size) !important;
+}

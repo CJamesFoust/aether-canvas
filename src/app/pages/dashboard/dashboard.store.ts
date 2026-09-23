@@ -54,7 +54,7 @@ export const DashboardStore = signalStore(
             }));
         },
 
-        updateWidgetSettings(id: string, newSettings: Record<string, any>) {
+        updateWidgetSettings(newSettings: Record<string, any>, id?: string) {
             patchState(store, (state) => ({
                 widgets: state.widgets.map((w) =>
                 w.id === id ? {...w, settings: {...w.settings, ...newSettings } } : w

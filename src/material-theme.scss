@@ -5,6 +5,16 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+:root {
+  @media (prefers-color-scheme: dark) {
+    @include mat.divider-overrides((
+      color: oklch(70.4% 0.04 256.788),
+    ))
+  }
+}
+
+// oklch(70.4% 0.04 256.788)
+
 html {
   height: 100%;
   @include mat.theme(

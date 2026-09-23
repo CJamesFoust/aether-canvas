@@ -1,19 +1,32 @@
-<div class="flex flex-col gap-8">
+<div class="px-4">
+  <div class="flex justify-between text-2xl h-auto">
+    <div class="flex flex-col">
+      <span>Widget Configuration -</span>
+      <span>{{ store.activeWidgetEditing()?.settings['title'] }}</span>
+    </div>
+    <button (click)="closeSettings.emit()" class="!rounded-xl dark:!text-white !h-auto cursor-pointer">
+      <mat-icon class="large-icon">close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-divider class="!my-4"></mat-divider>
+<div class="px-4">
+  <div class="flex flex-col gap-6">
     @if (store.activeWidgetEditing()) {
       @switch (store.activeWidgetEditing()?.type) {
         @case ('KPI_METRIC') {
-          <app-kpi-settings-form></app-kpi-settings-form>
+          <app-kpi-settings-form (closeSettings)="closeSettings.emit()"></app-kpi-settings-form>
         }
-    
+  
         @case ('CHART_TIME_SERIES') {
           <app-chart-settings-form></app-chart-settings-form>
         }
-    
+  
         @case ('TABLE_DATA') {
           <app-table-settings-form></app-table-settings-form>
         }
       }
     }
-    
-    <button mat-flat-button color="primary" (click)="closeSettings.emit()">Close</button>
+  
+  </div>
 </div>
