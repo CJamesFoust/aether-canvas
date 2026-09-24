@@ -1,5 +1,5 @@
 <div class="px-4">
-  <div class="flex justify-between text-2xl h-auto">
+  <div class="flex justify-between text-xl h-auto">
     <div class="flex flex-col">
       <span>Widget Configuration -</span>
       <span>{{ store.activeWidgetEditing()?.settings['title'] }}</span>
@@ -19,11 +19,11 @@
         }
   
         @case ('CHART_TIME_SERIES') {
-          <app-chart-settings-form></app-chart-settings-form>
+          <app-chart-settings-form (closeSettings)="closeSettings.emit()"></app-chart-settings-form>
         }
   
         @case ('TABLE_DATA') {
-          <app-table-settings-form></app-table-settings-form>
+          <app-table-settings-form (closeSettings)="closeSettings.emit()"></app-table-settings-form>
         }
       }
     }
