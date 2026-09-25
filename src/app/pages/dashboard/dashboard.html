@@ -13,7 +13,7 @@
         <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:!text-gray-200 font-medium !text-xl">
           <mat-icon class="!text-xl">dashboard</mat-icon> Dashboard
         </a>
-        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg text-gray-600 dark:!text-gray-200  hover:bg-gray-100 dark:hover:bg-gray-700 !text-xl">
+        <a mat-button class="w-full !justify-start !flex !items-center !gap-3 py-2 px-3 rounded-lg text-gray-600 dark:!text-gray-200  hover:bg-gray-100 dark:hover:bg-gray-700 !text-xl" (click)="this.store.loadKpiMetrics(['kpi-arr-001'])">
           <mat-icon class="!text-xl">settings</mat-icon> Settings
         </a>
       </nav>

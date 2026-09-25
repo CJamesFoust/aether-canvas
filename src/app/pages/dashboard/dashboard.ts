@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { WidgetSettings } from '../../components/widget-settings/widget-settings';
-import { patchState } from '@ngrx/signals';
 
 @Component({
   selector: 'app-dashboard',
@@ -145,7 +144,7 @@ export class Dashboard {
       id: crypto.randomUUID(),
       type: 'KPI_METRIC',
       position: this.calculateNextPosition(3, 2),
-      settings: { title: 'New KPI', refreshRate: 3000 }
+      settings: { title: 'New KPI', refreshRate: 3000, kpiType: 'ARR' }
     });
    }
   
