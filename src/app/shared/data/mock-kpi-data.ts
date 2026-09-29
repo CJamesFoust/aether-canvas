@@ -4,7 +4,7 @@ export const MockKpiData: KpiMetricData[] = [
   {
     id: 'kpi-mrr-001',
     metricType: 'MRR',
-    label: 'Monthly Recurring Revenue',
+    label: 'Monthly Recurring Revenue (MRR)',
     shortLabel: 'MRR',
     currentValue: 128450,
     previousValue: 121100,
@@ -21,7 +21,7 @@ export const MockKpiData: KpiMetricData[] = [
   {
     id: 'kpi-arr-001',
     metricType: 'ARR',
-    label: 'Annual Recurring Revenue',
+    label: 'Annual Recurring Revenue (ARR)',
     shortLabel: 'ARR',
     currentValue: 1541400,
     previousValue: 1150000,

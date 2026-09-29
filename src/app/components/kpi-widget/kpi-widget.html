@@ -1,4 +1,32 @@
 <div class="flex flex-col">
-    <span class="dark:text-white">{{ settings().title }}</span>
-    <span class="dark:text-white">{{ settings().refreshRate }}</span>
+  @if (loading()) {
+    <span class="dark:text-white">Loading...</span>
+  } @else if (metric(); as metric) {
+    <div class="flex justify-between">
+      <div class="flex flex-col">
+        <span class="text-gray-400"><label>Current Value</label></span>
+        <strong class="text-3xl dark:text-white">{{
+          this.metric()?.currentValue | currency
+        }}</strong>
+      </div>
+      <div class="flex flex-col">
+          <div class="flex items-center gap-2 text-2xl justify-end">
+            @if (metric.trendDirection === 'up') {
+              <mat-icon class="!text-green-600">trending_up</mat-icon>
+              <span class="text-green-600"> +{{ metric.trendPercentage }}% </span>
+            } @else {
+              <mat-icon class="!text-red-600">trending_down</mat-icon>
+              <span class="text-red-600"> -{{ metric.trendPercentage }}% </span>
+            }
+          </div>
+          <span class="text-gray-400">Comparison Period</span>
+      </div>
+    </div>
+    <div class="mt-2 h-10 w-full">
+      <app-sparkline
+        [data]="this.metric()?.sparklineData"
+        [color]="lineColor()"
+      />
+    </div>
+  }
 </div>

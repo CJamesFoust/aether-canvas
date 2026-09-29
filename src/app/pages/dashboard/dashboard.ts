@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, signal, OnInit } from '@angular/core';
 import { WidgetHost } from '../../shared/ui/widget-host';
 import { DashboardStore } from './dashboard.store';
 import { WidgetInstance } from '../../shared/models/widget-instance';
@@ -17,7 +17,7 @@ import { WidgetSettings } from '../../components/widget-settings/widget-settings
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   readonly store = inject(DashboardStore);
   readonly activeConfigWidget = signal<any | null>(null);
   readonly opened = signal(false);
@@ -144,7 +144,7 @@ export class Dashboard {
       id: crypto.randomUUID(),
       type: 'KPI_METRIC',
       position: this.calculateNextPosition(3, 2),
-      settings: { title: 'New KPI', refreshRate: 3000, kpiType: 'ARR' }
+      settings: { title: 'KPI Widget', refreshRate: 3000, kpiType: 'ARR' }
     });
    }
   
@@ -184,5 +184,9 @@ export class Dashboard {
     }, widget.id);
 
     this.closeSettings();
+  }
+
+  ngOnInit() {
+    this.store.loadKpiMetrics([])
   }
 }
